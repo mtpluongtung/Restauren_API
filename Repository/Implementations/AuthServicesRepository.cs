@@ -18,12 +18,10 @@ namespace Repositories.Implementations
     public class AuthServicesRepository : IAutheServices
     {
         private readonly RestaurentContext _context;
-        private readonly JwtOptions _jwtOptions;
         private readonly IHttpContextAccessor _httpcontext;
-        public AuthServicesRepository(RestaurentContext context, IOptions<JwtOptions> jwtOptions, IHttpContextAccessor httpContext)
+        public AuthServicesRepository(RestaurentContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
-            _jwtOptions = jwtOptions.Value;
             _httpcontext = httpContext;
         }
         public async Task<LoginResponse> Login(LoginParam param)
@@ -31,32 +29,23 @@ namespace Repositories.Implementations
             try
             {
                 LoginResponse loginRespon = new LoginResponse();
-                var user = _context.Users.FirstOrDefault(x => x.UserName == param.Username && x.Password == param.Password);
-
-                if (user == null)
-                {
-                    return loginRespon;
-                }
-                else
-                {
-                    loginRespon.User = user;
-                    loginRespon.Token = GenerateToken(user);
+                
+                    loginRespon.Token = GenerateToken();
                     loginRespon.flag = true;
                     return loginRespon;
-                }
+                
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-        private string GenerateToken(User applicationUser)
+        private string GenerateToken()
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtOptions.Secret);
+            var key = Encoding.ASCII.GetBytes("luong#duc#tung$dep%trai22");
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("username", applicationUser.UserName) }),
                 Expires = DateTime.UtcNow.AddHours(12),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

@@ -28,7 +28,7 @@ namespace Repositories.Implementations
             if (check) throw new BaseException("Bàn đã tồn tại");
 
             var ban = request.Adapt<Ban>();
-            _context.Bans.Add(ban);
+            await _context.Bans.AddAsync(ban);
             await _context.SaveChangesAsync();
 
             return new BaseResponse<BanResponse>().Success(ban.Adapt<BanResponse>());

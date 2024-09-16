@@ -5,12 +5,9 @@ namespace Entities.Entities;
 
 public partial class HoaDon
 {
-    public long? Id { get; set; }
-
-    public long? BanId { get; set; }
-
-    public long? SetId { get; set; }
-
-    public long? MonAnId { get; set; }
-    public DateTime CreatedDate { get; set; } = DateTime.Now;
+    public Guid MaHoaDon {  get; set; }
+    public long BanId { get; set; }
+    public DateTime NgayTao { get; set; }
+    public double TongTien {  get; set; }
+    public bool ThanhToan {  get; set; } = false;
 }

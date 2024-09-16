@@ -1,5 +1,6 @@
 ﻿using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,10 @@ namespace Business
         public virtual DbSet<HoaDon> SetBanMonAns { get; set; }
 
         public virtual DbSet<SetMonAn> SetMonAns { get; set; }
+        public virtual DbSet<HoaDonSetMonAn> HoaDonSetMonAns { get; set; }
+        public virtual DbSet<HoaDonMonAn> HoaDonMonAns { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Ban>(entity =>

@@ -15,9 +15,11 @@ public partial class SetMonAn
 
     public string? CreatedBy { get; set; }
 
-    public DateTime? CreatedDate { get; set; }
+    public DateTime? CreatedDate { get; set; } = DateTime.Now;
 
     public string? UpdatedBy { get; set; }
 
-    public DateTime? UpdatedDate { get; set; }
+    public DateTime? UpdatedDate { get; set; } = DateTime.Now;
+    public virtual Set Set { get; set; }
+    public virtual MonAn MonAn { get; set; }
 }

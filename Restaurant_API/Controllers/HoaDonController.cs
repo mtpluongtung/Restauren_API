@@ -21,5 +21,12 @@ namespace Restaurant_API.Controllers
             var result = await _hoaDonServices.Create(request);
             return Ok(result);
         }
+
+        [HttpDelete("Id")]
+        public async Task<IActionResult> Delete(Guid Id)
+        {
+            var result = await _hoaDonServices.Delete(Id);
+            return Ok(result);
+        }
     }
 }

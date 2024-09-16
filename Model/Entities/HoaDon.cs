@@ -5,6 +5,7 @@ namespace Entities.Entities;
 
 public partial class HoaDon
 {
+    public long Id { get; set; }    
     public Guid MaHoaDon {  get; set; }
     public long BanId { get; set; }
     public DateTime NgayTao { get; set; }

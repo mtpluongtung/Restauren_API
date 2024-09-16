@@ -10,6 +10,8 @@ namespace Restaurant_API.Register
             // Đăng ký service IMonAnServices và MonAnServices
             services.AddScoped<IMonAnServices, MonAnRespository>();
             services.AddScoped<IBanServices, BanRespository>();
+            services.AddScoped<IHoaDonServices, HoaDonRepository>();
+            services.AddScoped<ISetServices, SetRepository>();
         }
     }
 }

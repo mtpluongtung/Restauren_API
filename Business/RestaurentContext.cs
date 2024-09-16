@@ -24,11 +24,11 @@ namespace Business
 
         public virtual DbSet<Set> Sets { get; set; }
 
-        public virtual DbSet<HoaDon> SetBanMonAns { get; set; }
+        public virtual DbSet<HoaDon> HoaDon { get; set; }
 
         public virtual DbSet<SetMonAn> SetMonAns { get; set; }
-        public virtual DbSet<HoaDonSetMonAn> HoaDonSetMonAns { get; set; }
-        public virtual DbSet<HoaDonMonAn> HoaDonMonAns { get; set; }
+        public virtual DbSet<HoaDonSetMonAn> HoaDonSetMonAn { get; set; }
+        public virtual DbSet<HoaDonMonAn> HoaDonMonAn { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -86,8 +86,7 @@ namespace Business
             modelBuilder.Entity<HoaDon>(entity =>
             {
                 entity
-                    .HasNoKey()
-                    .ToTable("SetBanMonAn");
+                    .ToTable("HoaDon");
             });
 
             modelBuilder.Entity<SetMonAn>(entity =>

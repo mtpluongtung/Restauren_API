@@ -8,6 +8,7 @@ namespace Models.Entities
 {
     public partial class HoaDonSetMonAn
     {
+        public long Id {  get; set; }
         public Guid HoaDonId { get; set; }
         public long SetId {  get; set; }
         public int SoLuong {  get; set; }

@@ -19,7 +19,7 @@ public partial class SetMonAn
 
     public string? UpdatedBy { get; set; }
 
-    public DateTime? UpdatedDate { get; set; } = DateTime.Now;
+    public DateTime? UpdatedDate { get; set; } = DateTime.Now; 
     public virtual Set Set { get; set; }
     public virtual MonAn MonAn { get; set; }
 }

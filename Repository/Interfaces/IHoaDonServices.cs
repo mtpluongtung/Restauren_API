@@ -12,8 +12,8 @@ namespace Repositories.Interfaces
     public interface IHoaDonServices
     {
         Task<BaseResponse<HoaDonResponse>> Create(CreateHoaDonRequest reuquest);
-        Task<HoaDonResponse> Update(UpdateHoaDonRequest reuqest);
-        Task<HoaDonResponse> Delete(Guid Id);
-        Task<HoaDonResponse> Get(Guid Id);
+        Task<BaseResponse<HoaDonResponse>> Update(UpdateHoaDonRequest reuqest);
+        Task<BaseResponse<HoaDonResponse>> Delete(Guid Id);
+        Task<BaseResponse<HoaDonResponse>> GetById(Guid Id);
     }
 }

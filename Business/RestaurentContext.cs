@@ -29,7 +29,9 @@ namespace Business
         public virtual DbSet<SetMonAn> SetMonAns { get; set; }
         public virtual DbSet<HoaDonSetMonAn> HoaDonSetMonAn { get; set; }
         public virtual DbSet<HoaDonMonAn> HoaDonMonAn { get; set; }
-
+        public virtual DbSet<NhanVien> NhanVien { get; set; }
+        public virtual DbSet<ChamCong> ChamCong { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,11 +58,7 @@ namespace Business
             modelBuilder.Entity<NhanVien>(entity =>
             {
                 entity
-                    .HasNoKey()
                     .ToTable("NhanVien");
-
-                entity.Property(e => e.CheckOutTime).HasColumnType("datetime");
-                entity.Property(e => e.CheckinTime).HasColumnType("datetime");
                 entity.Property(e => e.MaNhanvien)
                     .HasMaxLength(10)
                     .IsFixedLength();
@@ -92,8 +90,6 @@ namespace Business
             modelBuilder.Entity<SetMonAn>(entity =>
             {
                 entity.ToTable("SetMonAN");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
                 entity.Property(e => e.CreatedBy).HasMaxLength(50);
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
                 entity.Property(e => e.TenMonAn).HasMaxLength(50);

@@ -1,5 +1,7 @@
 using Business;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Models.DTO.Configs;
 using Restaurant_API.Middleware;
 using Restaurant_API.Register;
 
@@ -15,7 +17,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.Configure<BaseConfig>(builder.Configuration.GetSection("BaseConfig"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

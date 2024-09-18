@@ -30,7 +30,7 @@ namespace Repositories.Implementations
             if (checkBan == null) throw new BaseException("Bàn không tồn tại");
             if (checkBan.TrangThai) throw new BaseException("Bàn đang được sử dụng không thể tạo hóa đơn cho bàn này");
 
-
+            checkBan.TrangThai=true;
             var hoaDon = new HoaDon();
             hoaDon.BanId = reuquest.BanId;
             hoaDon.MaHoaDon = Guid.NewGuid();
@@ -63,6 +63,7 @@ namespace Repositories.Implementations
 
                 result.SetMonAn.Add(monAn.Adapt<SetInHoaDonResponse>());
             }
+             _context.Bans.Update(checkBan);
             await _context.HoaDon.AddAsync(hoaDon);
             await _context.SaveChangesAsync();
             return new BaseResponse<HoaDonResponse>().Success(result);
@@ -84,9 +85,53 @@ namespace Repositories.Implementations
             return new BaseResponse<HoaDonResponse>().Success(hoadon.Adapt<HoaDonResponse>());
         }
 
-        public Task<BaseResponse<HoaDonResponse>> GetById(Guid Id)
+        public async Task<BaseResponse<HoaDonResponse>> GetById(Guid Id)
         {
-            throw new NotImplementedException();
+            var hoaDon = await _context.HoaDon
+             .Where(hd => hd.MaHoaDon == Id)
+             .Select(hd => new HoaDonResponse
+             {
+                 MaHoaDon = hd.MaHoaDon,
+                 BanId = hd.BanId,
+                 NgayTao = hd.NgayTao,
+                 ThanhToan = hd.ThanhToan,
+                 TongTien = _context.HoaDonSetMonAn
+                     .Where(hdso => hdso.HoaDonId == hd.MaHoaDon)
+                     .Sum(hdso => hdso.SoLuong * hdso.ThanhTien) +
+                 _context.HoaDonMonAn
+                     .Where(hdma => hdma.HoaDonId == hd.MaHoaDon)
+                     .Sum(hdma => hdma.SoLuong * hdma.ThanhTien),
+                 MonAn = new List<MonAnInHoaDonResponse>(),
+                 SetMonAn = new List<SetInHoaDonResponse>()
+             })
+             .SingleOrDefaultAsync();
+
+            if (hoaDon == null)
+                return null;
+
+            // Lấy danh sách các món ăn trong hóa đơn
+            hoaDon.MonAn = await _context.HoaDonMonAn
+                .Where(hdma => hdma.HoaDonId == Id)
+                .Select(hdma => new MonAnInHoaDonResponse
+                {
+                    MonAnId = hdma.MonAnId,
+                    SoLuong = hdma.SoLuong,
+                    ThanhTien = hdma.SoLuong * hdma.ThanhTien
+                })
+                .ToListAsync();
+
+            // Lấy danh sách các set món ăn trong hóa đơn
+            hoaDon.SetMonAn = await _context.HoaDonSetMonAn
+                .Where(hdso => hdso.HoaDonId == Id)
+                .Select(hdso => new SetInHoaDonResponse
+                {
+                    SetId = hdso.SetId,
+                    SoLuong = hdso.SoLuong,
+                    ThanhTien = hdso.SoLuong * hdso.ThanhTien
+                })
+                .ToListAsync();
+
+            return new BaseResponse<HoaDonResponse>().Success(hoaDon.Adapt<HoaDonResponse>()) ;
         }
 
         public Task<BaseResponse<HoaDonResponse>> Update(UpdateHoaDonRequest reuqest)

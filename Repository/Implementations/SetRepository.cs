@@ -25,30 +25,33 @@ namespace Repositories.Implementations
         public async Task<BaseResponse<SetResponse>> Create(CreateSetRequest request)
         {
             var set = new Set(request.Name, request.Gia, request.Url);
-            await _context.Sets.AddAsync(set);
+            await _context.Set.AddAsync(set);
+            var listSet= new List<SetMonAn>();
             foreach (var item in request.MonAn)
             {
-                var setMonAn = new SetMonAn();
-                setMonAn.MonAnId = item;
-                setMonAn.SetId = set.Id;
-                var check = await _context.SetMonAns.AnyAsync(x => x.MonAnId == item);
-                if (check) continue;
-
-                await _context.SetMonAns.AddAsync(setMonAn);
+                var setMonAn = new SetMonAn
+                {
+                    MonAnId = item,
+                    IdSet = set.Id
+                };
+                _context.Entry(setMonAn).State = EntityState.Detached;
+                listSet.Add(setMonAn);
             }
+            _context.SetMonAn.AddRange(listSet);
             await _context.SaveChangesAsync();
             return new BaseResponse<SetResponse>().Success(set.Adapt<SetResponse>());
+
         }
 
         public async Task<BaseResponse<SetResponse>> Delete(long Id)
         {
-            var set = await _context.Sets.FindAsync(Id);
+            var set = await _context.Set.FindAsync(Id);
             if (set == null) throw new BaseException("Không tìm thấy món ăn");
 
-            var check = await _context.SetMonAns.AnyAsync(x => x.SetId == Id);
+            var check = await _context.SetMonAn.AnyAsync(x => x.IdSet == Id);
             if (check) throw new BaseException("Vui lòng xóa tất cả món ăn khỏi set");
 
-            _context.Sets.Remove(set);
+            _context.Set.Remove(set);
             await _context.SaveChangesAsync();
             return new BaseResponse<SetResponse>().Success(set.Adapt<SetResponse>());
         }
@@ -56,7 +59,7 @@ namespace Repositories.Implementations
 
         public async Task<BaseResponse<List<SetResponse>>> GetAll()
         {
-            var setWithMonAns = await _context.Sets
+            var setWithMonAns = await _context.Set
                                                 .Include(s => s.SetMonAn)  // Include bảng trung gian SetMonAn
                                                 .ThenInclude(sma => sma.MonAn)  // Include bảng MonAn từ SetMonAn
                                                 .Select(s => new SetResponse
@@ -83,7 +86,7 @@ namespace Repositories.Implementations
 
         public async Task<BaseResponse<SetResponse>> GetById(long Id)
         {
-            var setWithMonAns = await _context.Sets.Where(x => x.Id == Id)
+            var setWithMonAns = await _context.Set.Where(x => x.Id == Id)
                                                 .Include(s => s.SetMonAn)  // Include bảng trung gian SetMonAn
                                                 .ThenInclude(sma => sma.MonAn)  // Include bảng MonAn từ SetMonAn
                                                 .Select(s => new SetResponse
@@ -109,23 +112,23 @@ namespace Repositories.Implementations
 
         public async Task<BaseResponse<SetResponse>> Update(UpdateSetRequest request)
         {
-            var set = await _context.Sets.FindAsync(request.Id);
+            var set = await _context.Set.FindAsync(request.Id);
             if (set == null) throw new BaseException("Không tìm thấy set này");
 
             set.Name = request.Name;
             set.Gia = request.Gia;
             set.Url = request.Url;
 
-            _context.Sets.Update(set);
-            var setMonAn = await _context.SetMonAns.Where(x=> x.SetId ==  request.Id).ToListAsync();
-             _context.SetMonAns.RemoveRange(setMonAn);
+            _context.Set.Update(set);
+            var setMonAn = await _context.SetMonAn.Where(x=> x.IdSet ==  request.Id).ToListAsync();
+             _context.SetMonAn.RemoveRange(setMonAn);
              foreach (var item in request.MonAn)
             {
                 var setMonNew = new SetMonAn();
-                setMonNew.SetId =request.Id;
+                setMonNew.IdSet = request.Id;
                 setMonNew.MonAnId = item;
 
-                _context.SetMonAns.Adapt(setMonNew);
+                _context.SetMonAn.Adapt(setMonNew);
             }
             await _context.SaveChangesAsync();
             return new BaseResponse<SetResponse>().Success(set.Adapt<SetResponse>());

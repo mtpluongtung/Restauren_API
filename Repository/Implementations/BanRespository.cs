@@ -24,11 +24,11 @@ namespace Repositories.Implementations
         }
         public async Task<BaseResponse<BanResponse>> Create(CreateBanRequest request)
         {
-            var check = await _context.Bans.AnyAsync(x => x.TenBan == request.TenBan);
+            var check = await _context.Ban.AnyAsync(x => x.TenBan == request.TenBan);
             if (check) throw new BaseException("Bàn đã tồn tại");
 
             var ban = request.Adapt<Ban>();
-            await _context.Bans.AddAsync(ban);
+            await _context.Ban.AddAsync(ban);
             await _context.SaveChangesAsync();
 
             return new BaseResponse<BanResponse>().Success(ban.Adapt<BanResponse>());
@@ -37,19 +37,19 @@ namespace Repositories.Implementations
 
         public async Task<BaseResponse<BanResponse>> Delete(long id)
         {
-            var ban = await _context.Bans.FindAsync(id);
+            var ban = await _context.Ban.FindAsync(id);
 
             if (ban == null) throw new BaseException("Không tìm thấy bàn này");
-            if (ban.TrangThai) throw new BaseException("Bàn này đang được sử dụng không thể xóa");
+            if (ban.TrangThai==1 || ban.TrangThai==2) throw new BaseException("Bàn này đang được sử dụng không thể xóa");
 
-            _context.Bans.Remove(ban);
+            _context.Ban.Remove(ban);
             await _context.SaveChangesAsync();
             return new BaseResponse<BanResponse>().Success(ban.Adapt<BanResponse>());
         }
 
         public async Task<BaseResponse<List<BanResponse>>> GetAll()
         {
-            var listBan = await _context.Bans.AsNoTracking().ToListAsync();
+            var listBan = await _context.Ban.AsNoTracking().ToListAsync();
             var result = listBan.Adapt<List<BanResponse>>();
 
             return new BaseResponse<List<BanResponse>>().Success(result);
@@ -57,13 +57,13 @@ namespace Repositories.Implementations
 
         public async Task<BaseResponse<BanResponse>> Update(UpdateBanReuquest request)
         {
-            var ban = await _context.Bans.FindAsync(request.Id);
+            var ban = await _context.Ban.FindAsync(request.Id);
 
             if (ban == null) throw new BaseException("Không tìm thấy bàn này");
 
             ban.TenBan = request.TenBan;
             ban.TrangThai = request.TrangThai;
-            _context.Bans.Update(ban);
+            _context.Ban.Update(ban);
 
             await _context.SaveChangesAsync();
             return new BaseResponse<BanResponse>().Success(ban.Adapt<BanResponse>());

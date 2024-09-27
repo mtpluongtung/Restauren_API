@@ -26,9 +26,9 @@ namespace Repositories.Implementations
         public async Task<BaseResponse<HoaDonResponse>> Create(CreateHoaDonRequest reuquest)
         {
 
-            var checkBan = await _context.Bans.FindAsync(reuquest.BanId);
+            var checkBan = await _context.Ban.FindAsync(reuquest.BanId);
             if (checkBan == null) throw new BaseException("Bàn không tồn tại");
-            if (checkBan.TrangThai) throw new BaseException("Bàn đang được sử dụng không thể tạo hóa đơn cho bàn này");
+            if (checkBan.TrangThai == 1) throw new BaseException("Bàn đang được sử dụng không thể tạo hóa đơn cho bàn này");
 
 
             var hoaDon = new HoaDon();

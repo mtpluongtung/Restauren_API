@@ -32,8 +32,15 @@ namespace Restaurant_API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateSetRequest request)
         {
-            var result = await _setServices.Create(request);
-            return Ok(result);
+            try
+            {
+                var result = await _setServices.Create(request);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpPut]

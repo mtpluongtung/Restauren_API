@@ -16,17 +16,17 @@ namespace Business
         {
         }
 
-        public virtual DbSet<Ban> Bans { get; set; }
+        public virtual DbSet<Ban> Ban { get; set; }
 
-        public virtual DbSet<MonAn> MonAns { get; set; }
+        public virtual DbSet<MonAn> MonAn { get; set; }
 
-        public virtual DbSet<NhanVien> NhanViens { get; set; }
+        public virtual DbSet<NhanVien> NhanVien { get; set; }
 
-        public virtual DbSet<Set> Sets { get; set; }
+        public virtual DbSet<Set> Set { get; set; }
 
         public virtual DbSet<HoaDon> HoaDon { get; set; }
 
-        public virtual DbSet<SetMonAn> SetMonAns { get; set; }
+        public virtual DbSet<SetMonAn> SetMonAn { get; set; }
         public virtual DbSet<HoaDonSetMonAn> HoaDonSetMonAn { get; set; }
         public virtual DbSet<HoaDonMonAn> HoaDonMonAn { get; set; }
 
@@ -69,19 +69,7 @@ namespace Business
                     .IsFixedLength();
             });
 
-            modelBuilder.Entity<Set>(entity =>
-            {
-                entity.ToTable("Set");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
-                entity.Property(e => e.CreatedBy).HasMaxLength(50);
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-                entity.Property(e => e.Gia).HasColumnType("decimal(18, 0)");
-                entity.Property(e => e.Name).HasMaxLength(50);
-                entity.Property(e => e.UpdatedBy).HasMaxLength(50);
-                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-                entity.Property(e => e.Url).HasMaxLength(500);
-            });
+       
 
             modelBuilder.Entity<HoaDon>(entity =>
             {
@@ -89,17 +77,7 @@ namespace Business
                     .ToTable("HoaDon");
             });
 
-            modelBuilder.Entity<SetMonAn>(entity =>
-            {
-                entity.ToTable("SetMonAN");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
-                entity.Property(e => e.CreatedBy).HasMaxLength(50);
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-                entity.Property(e => e.TenMonAn).HasMaxLength(50);
-                entity.Property(e => e.UpdatedBy).HasMaxLength(50);
-                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-            });
+          
         }
 
     }

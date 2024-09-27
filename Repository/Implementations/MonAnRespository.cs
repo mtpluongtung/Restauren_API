@@ -24,42 +24,42 @@ namespace Repositories.Implementations
         public async Task<BaseResponse<MonAnResponse>> Create(CreateMonAnRequest request)
         {
             var monAn = request.Adapt<MonAn>();
-            _context.MonAns.Add(monAn);
+            _context.MonAn.Add(monAn);
             await _context.SaveChangesAsync();
             return new BaseResponse<MonAnResponse>().Success(monAn.Adapt<MonAnResponse>());
         }
 
         public async Task<BaseResponse<MonAnResponse>> Delete(long id)
         {
-            var check = await _context.SetMonAns.AnyAsync(x => x.SetId == id);
+            var check = await _context.SetMonAn.AnyAsync(x => x.IdSet == id);
             if (check)
             {
                 throw new BaseException("Món ăn đã được sử dụng");
             }
-            var monAn = await _context.MonAns.FindAsync(id);
+            var monAn = await _context.MonAn.FindAsync(id);
             if (monAn == null)
             {
                 throw new BaseException("Không tìm thấy món ăn");
             }
-            _context.MonAns.Remove(monAn);
+            _context.MonAn.Remove(monAn);
             await _context.SaveChangesAsync();
             return new BaseResponse<MonAnResponse>().Success(monAn.Adapt<MonAnResponse>());
         }
 
         public async Task<BaseResponse<List<MonAnResponse>>> GetAll()
         {
-            var listMonAn = await _context.MonAns.ToListAsync();
+            var listMonAn = await _context.MonAn.ToListAsync();
             var result = listMonAn.Adapt<List<MonAnResponse>>();
             return new BaseResponse<List<MonAnResponse>>().Success(result);
         }
 
         public async Task<BaseResponse<MonAnResponse>> Update(UpdateMonAnRequest request)
         {
-            var monAn = await _context.MonAns.FindAsync(request.Id);
+            var monAn = await _context.MonAn.FindAsync(request.Id);
             if (monAn == null) throw new BaseException("Không tìm thấy món ăn");
 
             monAn = request.Adapt<MonAn>();
-            _context.MonAns.Update(monAn);
+            _context.MonAn.Update(monAn);
             await _context.SaveChangesAsync();
             return monAn.Adapt<BaseResponse<MonAnResponse>>();
         }

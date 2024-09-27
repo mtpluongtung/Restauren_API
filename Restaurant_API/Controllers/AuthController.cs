@@ -22,10 +22,9 @@ namespace Restaurant_API.Controllers
             return Ok(result);
         }
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> RefreshToken()
         {
-            var result = await _authenticationService.RefreshToken();
+            var result = "";
             if (result == null)
             {
                 return new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };

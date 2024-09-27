@@ -34,6 +34,6 @@ public partial class Set
     public string? UpdatedBy { get; set; }
 
     public DateTime? UpdatedDate { get; set; } = DateTime.Now;
-    public virtual IReadOnlyCollection<MonAn> MonAns { get; set; }
-    public virtual IReadOnlyCollection<SetMonAn> SetMonAn { get; set; }
+    public virtual List<MonAn> MonAns { get; set; } = new ();
+    public virtual List<SetMonAn> SetMonAn { get; set; } = new();
 }

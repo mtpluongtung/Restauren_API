@@ -9,9 +9,10 @@ namespace Models.DTO.Request.Ban
     public class UpdateBanReuquest
     {
         public long Id { get; set; }
-
         public string? TenBan { get; set; }
-
-        public bool TrangThai { get; set; } = false;
+        public int TrangThai { get; set; } 
+        public string? Tang { get; set; }
+        public int SoNguoi { get; set; }
+        public int SoGhe { get; set; }
     }
 }

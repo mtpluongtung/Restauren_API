@@ -8,14 +8,11 @@ namespace Entities.DTO.Response
 {
     public class BanResponse
     {
-        public long? Id { get; set; }
-
+        public long Id { get; set; }
         public string? TenBan { get; set; }
-
-        public bool? TrangThai { get; set; }
-
-        public string? CreatedBy { get; set; }
-
-        public DateTime? CreatedDate { get; set; }
+        public int TrangThai { get; set; }
+        public string? Tang { get; set; }
+        public int SoNguoi { get; set; }
+        public int SoGhe { get; set; }
     }
 }

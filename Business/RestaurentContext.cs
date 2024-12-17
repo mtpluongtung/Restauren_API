@@ -29,7 +29,9 @@ namespace Business
         public virtual DbSet<SetMonAn> SetMonAn { get; set; }
         public virtual DbSet<HoaDonSetMonAn> HoaDonSetMonAn { get; set; }
         public virtual DbSet<HoaDonMonAn> HoaDonMonAn { get; set; }
-
+        public virtual DbSet<NhanVien> NhanVien { get; set; }
+        public virtual DbSet<ChamCong> ChamCong { get; set; }
+        public virtual DbSet<Order> Order { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,11 +58,7 @@ namespace Business
             modelBuilder.Entity<NhanVien>(entity =>
             {
                 entity
-                    .HasNoKey()
                     .ToTable("NhanVien");
-
-                entity.Property(e => e.CheckOutTime).HasColumnType("datetime");
-                entity.Property(e => e.CheckinTime).HasColumnType("datetime");
                 entity.Property(e => e.MaNhanvien)
                     .HasMaxLength(10)
                     .IsFixedLength();
@@ -77,7 +75,21 @@ namespace Business
                     .ToTable("HoaDon");
             });
 
-          
+            modelBuilder.Entity<SetMonAn>(entity =>
+            {
+                entity.ToTable("SetMonAN");
+                entity.Property(e => e.CreatedBy).HasMaxLength(50);
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+                entity.Property(e => e.TenMonAn).HasMaxLength(50);
+                entity.Property(e => e.UpdatedBy).HasMaxLength(50);
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+            });
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.ToTable("Order");
+                entity.Property(e => e.CreatedBy).HasMaxLength(50);
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            });
         }
 
     }

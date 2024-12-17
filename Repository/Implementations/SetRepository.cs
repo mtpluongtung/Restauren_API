@@ -84,7 +84,7 @@ namespace Repositories.Implementations
             return new BaseResponse<List<SetResponse>>().Success(setWithMonAns);
         }
 
-        public async Task<BaseResponse<SetResponse>> GetById(long Id)
+        public async Task<SetResponse> GetById(long Id)
         {
             var setWithMonAns = await _context.Set.Where(x => x.Id == Id)
                                                 .Include(s => s.SetMonAn)  // Include bảng trung gian SetMonAn
@@ -107,7 +107,7 @@ namespace Repositories.Implementations
                 throw new BaseException("Không có set nào.");
             }
 
-            return new BaseResponse<SetResponse>().Success(setWithMonAns);
+            return setWithMonAns;
         }
 
         public async Task<BaseResponse<SetResponse>> Update(UpdateSetRequest request)

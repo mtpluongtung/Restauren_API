@@ -4,6 +4,7 @@ using Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Business.Migrations
 {
     [DbContext(typeof(RestaurentContext))]
-    partial class RestaurentContextModelSnapshot : ModelSnapshot
+    [Migration("20240918070623_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,15 +39,6 @@ namespace Business.Migrations
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
-
-                    b.Property<int>("SoGhe")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SoNguoi")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Tang")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TenBan")
                         .HasMaxLength(50)
@@ -126,6 +120,8 @@ namespace Business.Migrations
 
             modelBuilder.Entity("Entities.Entities.NhanVien", b =>
                 {
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<long?>("Id")
                         .HasColumnType("bigint");

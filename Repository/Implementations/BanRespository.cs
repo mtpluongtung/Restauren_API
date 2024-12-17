@@ -40,7 +40,7 @@ namespace Repositories.Implementations
             var ban = await _context.Ban.FindAsync(id);
 
             if (ban == null) throw new BaseException("Không tìm thấy bàn này");
-            if (ban.TrangThai==1 || ban.TrangThai==2) throw new BaseException("Bàn này đang được sử dụng không thể xóa");
+            if (ban.TrangThai) throw new BaseException("Bàn này đang được sử dụng không thể xóa");
 
             _context.Ban.Remove(ban);
             await _context.SaveChangesAsync();

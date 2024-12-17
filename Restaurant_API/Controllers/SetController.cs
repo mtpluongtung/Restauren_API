@@ -25,7 +25,7 @@ namespace Restaurant_API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(long id)
         {
-            var result = await _setServices.GetById(id);
+             var result = await _setServices.GetById(id);
             return Ok(result);
         }
 

@@ -10,7 +10,7 @@ namespace Models.DTO.Request.Ban
     {
         public long Id { get; set; }
         public string? TenBan { get; set; }
-        public int TrangThai { get; set; } 
+        public bool TrangThai { get; set; } 
         public string? Tang { get; set; }
         public int SoNguoi { get; set; }
         public int SoGhe { get; set; }

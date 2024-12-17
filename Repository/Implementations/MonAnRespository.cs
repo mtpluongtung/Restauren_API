@@ -31,7 +31,7 @@ namespace Repositories.Implementations
 
         public async Task<BaseResponse<MonAnResponse>> Delete(long id)
         {
-            var check = await _context.SetMonAn.AnyAsync(x => x.IdSet == id);
+            var check = await _context.SetMonAn.AnyAsync(x => x.SetId == id);
             if (check)
             {
                 throw new BaseException("Món ăn đã được sử dụng");

@@ -9,7 +9,7 @@ public partial class SetMonAn
 
     public long? MonAnId { get; set; }
 
-    public long? IdSet { get; set; }
+    public long? SetId { get; set; }
 
     public string? TenMonAn { get; set; }
 
@@ -19,7 +19,6 @@ public partial class SetMonAn
 
     public string? UpdatedBy { get; set; }
 
-    public DateTime? UpdatedDate { get; set; } = DateTime.Now; 
-    public virtual Set Set { get; set; }
-    public virtual MonAn MonAn { get; set; }
+    public DateTime? UpdatedDate { get; set; } = DateTime.Now;
+	public MonAn MonAn { get; set; } // Điều hướng tới MonAn
 }

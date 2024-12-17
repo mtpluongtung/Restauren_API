@@ -13,6 +13,7 @@ namespace Restaurant_API.Register
             services.AddScoped<IHoaDonServices, HoaDonRepository>();
             services.AddScoped<ISetServices, SetRepository>();
             services.AddScoped<INhanVienServices, NhanVienRepository>();
+            services.AddScoped<IOrderSevices, OrderRepository>();
         }
     }
 }

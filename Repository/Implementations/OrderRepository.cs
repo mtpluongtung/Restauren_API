@@ -1,6 +1,7 @@
 ﻿using Business;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Models.Constans;
 using Models.DTO.Request.Order;
 using Models.DTO.Response;
 using Models.Entities;
@@ -44,9 +45,27 @@ namespace Repositories.Implementations
 
         public async Task<List<MenuResponse>> GetMenu()
         {
-           var result = new List<MenuResponse>();
-            var monAn = await _context.MonAns.ToListAsync();
-            return result;
+            var result = new List<MenuResponse>();
+            var monAn = await _context.MonAns.Select(x => new MenuResponse
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Url = x.Url,
+                Gia = x.Gia,
+                Type = TypeMenu.MON_AN
+            }
+            ).ToListAsync();
+            var set = await _context.Sets.Select(x => new MenuResponse
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Url = x.Url,
+                Gia = x.Gia,
+                Type = TypeMenu.BUFFE
+            }).ToListAsync();
+            result.AddRange(monAn);
+            result.AddRange(set);
+            return result.OrderByDescending(x => x.Type).ToList();
         }
     }
 }

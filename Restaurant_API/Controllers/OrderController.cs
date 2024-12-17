@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTO.Request.Order;
+using Models.Entities;
 using Repositories.Interfaces;
 
 namespace Restaurant_API.Controllers
@@ -21,10 +22,11 @@ namespace Restaurant_API.Controllers
             var result = await _orderSevices.Create(order);
             return Ok(result);
         }
-        [HttpGet]
+        [HttpGet("/menu")]
         public async Task<IActionResult> GetMenu()
         {
-
+            var result = await _orderSevices.GetMenu();
+            return Ok(result);
         }
     }
 }

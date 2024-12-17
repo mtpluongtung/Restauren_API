@@ -9,9 +9,10 @@ namespace Models.DTO.Response
     public class MenuResponse
     {
         public long Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; } = string.Empty;
         public int Type { get; set; }
-        public string Url { get; set; } = string.Empty;
-        public decimal Gia { get; set; }
+        public string? Url { get; set; } = string.Empty;
+        public decimal? Gia { get; set; }
+        public int Count { get; set; } = 0;
     }
 }

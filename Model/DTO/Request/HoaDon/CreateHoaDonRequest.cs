@@ -8,8 +8,8 @@ namespace Models.DTO.Request.HoaDon
 {
     public class CreateHoaDonRequest
     {
-        public Guid MaHoaDon { get; set; }
         public long BanId { get; set; }
+        public Guid MaOrder { get; set; }
         public DateTime NgayTao { get; set; }
         public double TongTien { get; set; }
         public bool ThanhToan { get; set; } = false;
@@ -20,14 +20,12 @@ namespace Models.DTO.Request.HoaDon
 
     public class HoaDonMonAnRequest
     {
-        public Guid HoaDonId { get; set; }
         public long MonAnId { get; set; }
         public int SoLuong { get; set; }
         public double ThanhTien { get; set; }
     }
     public class HoaDonSetMonAnRequest
     {
-        public Guid HoaDonId { get; set; }
         public long SetId { get; set; }
         public int SoLuong { get; set; }
         public double ThanhTien { get; set; }

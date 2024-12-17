@@ -29,7 +29,6 @@ namespace Business
         public virtual DbSet<SetMonAn> SetMonAn { get; set; }
         public virtual DbSet<HoaDonSetMonAn> HoaDonSetMonAn { get; set; }
         public virtual DbSet<HoaDonMonAn> HoaDonMonAn { get; set; }
-        public virtual DbSet<NhanVien> NhanVien { get; set; }
         public virtual DbSet<ChamCong> ChamCong { get; set; }
         public virtual DbSet<Order> Order { get; set; }
 

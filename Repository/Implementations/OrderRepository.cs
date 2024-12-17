@@ -26,7 +26,7 @@ namespace Repositories.Implementations
             try
             {
                 var order = createOrder.Adapt<Order>();
-                var ban = await _context.Bans.FindAsync(createOrder.BanId);
+                var ban = await _context.Ban.FindAsync(createOrder.BanId);
                 if (ban != null)
                 {
                     ban.TrangThai = true;
@@ -46,7 +46,7 @@ namespace Repositories.Implementations
         public async Task<List<MenuResponse>> GetMenu()
         {
             var result = new List<MenuResponse>();
-            var monAn = await _context.MonAns.Select(x => new MenuResponse
+            var monAn = await _context.MonAn.Select(x => new MenuResponse
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -55,7 +55,7 @@ namespace Repositories.Implementations
                 Type = TypeMenu.MON_AN
             }
             ).ToListAsync();
-            var set = await _context.Sets.Select(x => new MenuResponse
+            var set = await _context.Set.Select(x => new MenuResponse
             {
                 Id = x.Id,
                 Name = x.Name,

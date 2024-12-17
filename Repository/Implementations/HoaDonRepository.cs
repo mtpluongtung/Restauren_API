@@ -28,7 +28,7 @@ namespace Repositories.Implementations
 
             var checkBan = await _context.Ban.FindAsync(reuquest.BanId);
             if (checkBan == null) throw new BaseException("Bàn không tồn tại");
-            if (checkBan.TrangThai == 1) throw new BaseException("Bàn đang được sử dụng không thể tạo hóa đơn cho bàn này");
+            if (checkBan.TrangThai) throw new BaseException("Bàn đang được sử dụng không thể tạo hóa đơn cho bàn này");
 
             checkBan.TrangThai=true;
             var hoaDon = new HoaDon();
@@ -63,7 +63,7 @@ namespace Repositories.Implementations
 
                 result.SetMonAn.Add(monAn.Adapt<SetInHoaDonResponse>());
             }
-             _context.Bans.Update(checkBan);
+             _context.Ban.Update(checkBan);
             await _context.HoaDon.AddAsync(hoaDon);
             await _context.SaveChangesAsync();
             return new BaseResponse<HoaDonResponse>().Success(result);

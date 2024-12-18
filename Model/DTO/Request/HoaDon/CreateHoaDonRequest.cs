@@ -8,6 +8,7 @@ namespace Models.DTO.Request.HoaDon
 {
     public class CreateHoaDonRequest
     {
+        public long Id { get; set; }
         public long BanId { get; set; }
         public Guid MaOrder { get; set; }
         public DateTime NgayTao { get; set; }

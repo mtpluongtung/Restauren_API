@@ -23,21 +23,27 @@ namespace Repositories.Implementations
         {
             _context = context;
         }
-        public async Task<BaseResponse<HoaDonResponse>> Create(CreateHoaDonRequest reuquest)
+        public async Task<BaseResponse<HoaDonResponse>> Create(CreateHoaDonRequest request)
         {
             try
             {
+                var checkOrder = await _context.HoaDon.Where(x => x.MaOrder == request.MaOrder).FirstOrDefaultAsync();
+                if (checkOrder != null)
+                {
+                   var resultUpdate = await CapNhatOrder(request, checkOrder);
+                    return resultUpdate;
+                }
                 var hoaDon = new HoaDon();
-                hoaDon.MaOrder = reuquest.MaOrder;
-                var tienMonAn = reuquest.MonAn.Select(x => x.ThanhTien).Sum();
-                var tienSetMonAn = reuquest.MonAn.Select(x => x.ThanhTien).Sum();
+                hoaDon.MaOrder = request.MaOrder;
+                var tienMonAn = request.MonAn.Select(x => x.ThanhTien).Sum();
+                var tienSetMonAn = request.MonAn.Select(x => x.ThanhTien).Sum();
                 hoaDon.TongTien = tienMonAn + tienSetMonAn;
                 var result = hoaDon.Adapt<HoaDonResponse>();
-                foreach (var item in reuquest.Set)
+                foreach (var item in request.Set)
                 {
                     var setHoaDon = new HoaDonSetMonAn();
                     setHoaDon.SoLuong = item.SoLuong;
-                    setHoaDon.MaOrder = reuquest.MaOrder;
+                    setHoaDon.MaOrder = request.MaOrder;
                     setHoaDon.SetId = item.SetId;
                     setHoaDon.ThanhTien = item.ThanhTien;
 
@@ -46,11 +52,11 @@ namespace Repositories.Implementations
                     result.SetMonAn.Add(setHoaDon.Adapt<SetInHoaDonResponse>());
                 }
 
-                foreach (var item in reuquest.MonAn)
+                foreach (var item in request.MonAn)
                 {
                     var monAn = new HoaDonMonAn();
                     monAn.SoLuong = item.SoLuong;
-                    monAn.MaOrder = reuquest.MaOrder;
+                    monAn.MaOrder = request.MaOrder;
                     monAn.MonAnId = item.MonAnId;
                     monAn.ThanhTien = item.ThanhTien;
 
@@ -70,7 +76,59 @@ namespace Repositories.Implementations
             }
         }
 
-        public async Task<BaseResponse<HoaDonResponse>> Delete(Guid Id)
+		private async Task<BaseResponse<HoaDonResponse>> CapNhatOrder(CreateHoaDonRequest request,HoaDon hoaDon)
+		{
+
+			var result = hoaDon.Adapt<HoaDonResponse>();
+			foreach (var item in request.Set)
+			{
+				var checlSet = await _context.HoaDonSetMonAn.AnyAsync(x => x.MaOrder == request.MaOrder && x.SetId == item.SetId);
+                if (!checlSet)
+                {
+					var setHoaDon = new HoaDonSetMonAn();
+					setHoaDon.SoLuong = item.SoLuong;
+					setHoaDon.MaOrder = request.MaOrder;
+					setHoaDon.SetId = item.SetId;
+					setHoaDon.ThanhTien += item.ThanhTien;
+
+					await _context.HoaDonSetMonAn.AddAsync(setHoaDon);
+					result.SetMonAn.Add(setHoaDon.Adapt<SetInHoaDonResponse>());
+				}
+
+				
+			}
+
+			foreach (var item in request.MonAn)
+			{
+				var monAn = await _context.HoaDonMonAn.FirstOrDefaultAsync(x => x.MaOrder == request.MaOrder && x.MonAnId == item.MonAnId);
+                if (monAn != null)
+                {
+					monAn.SoLuong += item.SoLuong;
+					hoaDon.TongTien += item.ThanhTien;
+
+					 _context.HoaDonMonAn.Update(monAn);
+
+					result.MonAn.Add(monAn.Adapt<MonAnInHoaDonResponse>());
+				}
+                else
+                {
+                    var monAnNew = new HoaDonMonAn();
+                    monAnNew.SoLuong = item.SoLuong;
+                    monAnNew.MaOrder = request.MaOrder;
+                    monAnNew.MonAnId = item.MonAnId;
+                    monAnNew.ThanhTien = item.ThanhTien;
+					hoaDon.TongTien += item.ThanhTien;
+					await _context.HoaDonMonAn.AddAsync(monAnNew);
+
+					result.MonAn.Add(monAn.Adapt<MonAnInHoaDonResponse>());
+				}
+			}
+            _context.HoaDon.Update(hoaDon);
+           await _context.SaveChangesAsync();
+            return new BaseResponse<HoaDonResponse>().Success(result);
+		}
+
+		public async Task<BaseResponse<HoaDonResponse>> Delete(Guid Id)
         {
             var hoadon = await _context.HoaDon.Where(x=> x.MaOrder == Id).FirstOrDefaultAsync();
             if (hoadon == null) throw new BaseException("Hóa đơn không tồn tại");
@@ -86,11 +144,39 @@ namespace Repositories.Implementations
             return new BaseResponse<HoaDonResponse>().Success(hoadon.Adapt<HoaDonResponse>());
         }
 
-        public async Task<List<HoaDonResponse>> GetAll()
-        {
-            var hoaDon = await _context.HoaDon.ToListAsync();
-            return hoaDon.Adapt<List<HoaDonResponse>>();
-        }
+        public async Task<PagedResult<HoaDonResponse>> GetAll(GetHoaDonRequest request)
+		{
+			// Xác định số lượng bản ghi trên mỗi trang và trang hiện tại
+			int pageSize = request.PageSize > 0 ? request.PageSize : 25; // Mặc định là 10
+			int pageNumber = request.Page > 0 ? request.Page : 1; // Mặc định là trang 1
+
+			// Tính toán số lượng bản ghi cần bỏ qua
+			int skip = (pageNumber - 1) * pageSize;
+
+			// Lấy danh sách hóa đơn với phân trang
+			var hoaDonQuery = _context.HoaDon.AsQueryable();
+
+			// Áp dụng sắp xếp, phân trang
+			var hoaDonPaged = await hoaDonQuery
+				.OrderByDescending(x => x.NgayTao)
+				.Skip(skip)
+				.Take(pageSize)
+				.ToListAsync();
+
+			// Đếm tổng số lượng bản ghi
+			int totalRecords = await hoaDonQuery.CountAsync();
+
+			// Chuẩn bị kết quả trả về dạng PagedResult
+			var result = new PagedResult<HoaDonResponse>
+			{
+				Items = hoaDonPaged.Adapt<List<HoaDonResponse>>(),
+				TotalRecords = totalRecords,
+				PageNumber = pageNumber,
+				PageSize = pageSize
+			};
+
+			return result;
+		}
 
         public async Task<BaseResponse<HoaDonResponse>> GetById(Guid Id)
         {

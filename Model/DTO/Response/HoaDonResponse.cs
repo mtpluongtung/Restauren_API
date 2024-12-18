@@ -8,8 +8,8 @@ namespace Models.DTO.Response
 {
     public class HoaDonResponse
     {
-        public Guid MaHoaDon { get; set; }
-        public long BanId { get; set; }
+        public long Id { get; set; }
+        public Guid MaOrder { get; set; }
         public DateTime NgayTao { get; set; }
         public double TongTien { get; set; }
         public bool ThanhToan { get; set; } = false;

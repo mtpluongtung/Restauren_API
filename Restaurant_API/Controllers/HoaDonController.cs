@@ -39,5 +39,11 @@ namespace Restaurant_API.Controllers
             var result = await _hoaDonServices.GetById(id);
             return Ok(result);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _hoaDonServices.GetAll();
+            return Ok(result);
+        }
     }
 }

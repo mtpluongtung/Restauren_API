@@ -28,5 +28,10 @@ namespace Restaurant_API.Controllers
             var result = await _orderSevices.GetMenu();
             return Ok(result);
         }
+        [HttpPost("/them-mon")]
+        public async Task<IActionResult> ThemMon(OrderThemRequest request)
+        {
+            return Ok(request);
+        }
     }
 }

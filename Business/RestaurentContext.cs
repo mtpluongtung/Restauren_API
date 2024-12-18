@@ -95,7 +95,14 @@ namespace Business
 				entity.Property(e => e.Name).HasMaxLength(50);
 				entity.Property(e => e.Gia).HasColumnType("decimal(18, 0)");
 			});
-		}
+            // Ánh xạ entity MonAn tới bảng "MonAn"
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.ToTable("Order");
+                entity.Property(e => e.Phone).HasMaxLength(15);
+                entity.Property(e => e.TenKhachHang).HasMaxLength(250);
+            });
+        }
 
     }
 }

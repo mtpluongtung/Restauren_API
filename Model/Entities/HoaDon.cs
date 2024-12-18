@@ -6,11 +6,8 @@ namespace Entities.Entities;
 public partial class HoaDon
 {
     public long Id { get; set; }    
-    public Guid MaHoaDon {  get; set; }
-    public long BanId { get; set; }
-    public DateTime NgayTao { get; set; }
+    public Guid MaOrder {  get; set; }
+    public DateTime NgayTao { get; set; } = DateTime.Now;
     public double TongTien {  get; set; }
-    public string Phone { get; set; } = string.Empty;
-    public string TenKhachHang { get; set; } = string.Empty;
     public bool ThanhToan {  get; set; } = false;
 }

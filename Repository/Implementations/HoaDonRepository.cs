@@ -25,56 +25,57 @@ namespace Repositories.Implementations
         }
         public async Task<BaseResponse<HoaDonResponse>> Create(CreateHoaDonRequest reuquest)
         {
-
-            var checkBan = await _context.Ban.FindAsync(reuquest.BanId);
-            if (checkBan == null) throw new BaseException("Bàn không tồn tại");
-            if (checkBan.TrangThai) throw new BaseException("Bàn đang được sử dụng không thể tạo hóa đơn cho bàn này");
-
-            checkBan.TrangThai=true;
-            var hoaDon = new HoaDon();
-            hoaDon.BanId = reuquest.BanId;
-            hoaDon.MaHoaDon = Guid.NewGuid();
-            var tienMonAn = reuquest.MonAn.Select(x => x.ThanhTien).Sum();
-            var tienSetMonAn = reuquest.MonAn.Select(x => x.ThanhTien).Sum();
-            hoaDon.TongTien = tienMonAn + tienSetMonAn;
-            var result = hoaDon.Adapt<HoaDonResponse>();
-            foreach (var item in reuquest.Set)
+            try
             {
-                var setHoaDon = new HoaDonSetMonAn();
-                setHoaDon.SoLuong = item.SoLuong;
-                setHoaDon.HoaDonId = hoaDon.MaHoaDon;
-                setHoaDon.SetId = item.SetId;
-                setHoaDon.ThanhTien = item.ThanhTien;
+                var hoaDon = new HoaDon();
+                hoaDon.MaOrder = reuquest.MaOrder;
+                var tienMonAn = reuquest.MonAn.Select(x => x.ThanhTien).Sum();
+                var tienSetMonAn = reuquest.MonAn.Select(x => x.ThanhTien).Sum();
+                hoaDon.TongTien = tienMonAn + tienSetMonAn;
+                var result = hoaDon.Adapt<HoaDonResponse>();
+                foreach (var item in reuquest.Set)
+                {
+                    var setHoaDon = new HoaDonSetMonAn();
+                    setHoaDon.SoLuong = item.SoLuong;
+                    setHoaDon.MaOrder = reuquest.MaOrder;
+                    setHoaDon.SetId = item.SetId;
+                    setHoaDon.ThanhTien = item.ThanhTien;
 
-                await _context.HoaDonSetMonAn.AddAsync(setHoaDon);
+                    await _context.HoaDonSetMonAn.AddAsync(setHoaDon);
 
-                result.SetMonAn.Add(setHoaDon.Adapt<SetInHoaDonResponse>());
+                    result.SetMonAn.Add(setHoaDon.Adapt<SetInHoaDonResponse>());
+                }
+
+                foreach (var item in reuquest.MonAn)
+                {
+                    var monAn = new HoaDonMonAn();
+                    monAn.SoLuong = item.SoLuong;
+                    monAn.MaOrder = reuquest.MaOrder;
+                    monAn.MonAnId = item.MonAnId;
+                    monAn.ThanhTien = item.ThanhTien;
+
+                    await _context.HoaDonMonAn.AddAsync(monAn);
+
+                    result.MonAn.Add(monAn.Adapt<MonAnInHoaDonResponse>());
+                }
+
+                await _context.HoaDon.AddAsync(hoaDon);
+                await _context.SaveChangesAsync();
+                return new BaseResponse<HoaDonResponse>().Success(result);
             }
-
-            foreach (var item in reuquest.MonAn)
+            catch (Exception ex) 
             {
-                var monAn = new HoaDonMonAn();
-                monAn.SoLuong = item.SoLuong;
-                monAn.HoaDonId = hoaDon.MaHoaDon;
-                monAn.MonAnId = item.MonAnId;
-                monAn.ThanhTien = item.ThanhTien;
-
-                await _context.HoaDonMonAn.AddAsync(monAn);
-
-                result.SetMonAn.Add(monAn.Adapt<SetInHoaDonResponse>());
+                var message = ex.Message;
+                throw ex;
             }
-             _context.Ban.Update(checkBan);
-            await _context.HoaDon.AddAsync(hoaDon);
-            await _context.SaveChangesAsync();
-            return new BaseResponse<HoaDonResponse>().Success(result);
         }
 
         public async Task<BaseResponse<HoaDonResponse>> Delete(Guid Id)
         {
-            var hoadon = await _context.HoaDon.Where(x=> x.MaHoaDon == Id).FirstOrDefaultAsync();
+            var hoadon = await _context.HoaDon.Where(x=> x.MaOrder == Id).FirstOrDefaultAsync();
             if (hoadon == null) throw new BaseException("Hóa đơn không tồn tại");
-            var hoadonMonAn = await _context.HoaDonMonAn.Where(x => x.HoaDonId == Id).ToListAsync();
-            var hoaDonSet = await _context.HoaDonSetMonAn.Where(x => x.HoaDonId == Id).ToListAsync();
+            var hoadonMonAn = await _context.HoaDonMonAn.Where(x => x.MaOrder == Id).ToListAsync();
+            var hoaDonSet = await _context.HoaDonSetMonAn.Where(x => x.MaOrder == Id).ToListAsync();
 
             _context.HoaDon.Remove(hoadon);
             _context.HoaDonMonAn.RemoveRange(hoadonMonAn);
@@ -85,21 +86,26 @@ namespace Repositories.Implementations
             return new BaseResponse<HoaDonResponse>().Success(hoadon.Adapt<HoaDonResponse>());
         }
 
+        public async Task<List<HoaDonResponse>> GetAll()
+        {
+            var hoaDon = await _context.HoaDon.ToListAsync();
+            return hoaDon.Adapt<List<HoaDonResponse>>();
+        }
+
         public async Task<BaseResponse<HoaDonResponse>> GetById(Guid Id)
         {
             var hoaDon = await _context.HoaDon
-             .Where(hd => hd.MaHoaDon == Id)
+             .Where(hd => hd.MaOrder == Id)
              .Select(hd => new HoaDonResponse
              {
-                 MaHoaDon = hd.MaHoaDon,
-                 BanId = hd.BanId,
+                 MaOrder = hd.MaOrder,
                  NgayTao = hd.NgayTao,
                  ThanhToan = hd.ThanhToan,
                  TongTien = _context.HoaDonSetMonAn
-                     .Where(hdso => hdso.HoaDonId == hd.MaHoaDon)
+                     .Where(hdso => hdso.MaOrder == hd.MaOrder)
                      .Sum(hdso => hdso.SoLuong * hdso.ThanhTien) +
                  _context.HoaDonMonAn
-                     .Where(hdma => hdma.HoaDonId == hd.MaHoaDon)
+                     .Where(hdma => hdma.MaOrder == hd.MaOrder)
                      .Sum(hdma => hdma.SoLuong * hdma.ThanhTien),
                  MonAn = new List<MonAnInHoaDonResponse>(),
                  SetMonAn = new List<SetInHoaDonResponse>()
@@ -111,7 +117,7 @@ namespace Repositories.Implementations
 
             // Lấy danh sách các món ăn trong hóa đơn
             hoaDon.MonAn = await _context.HoaDonMonAn
-                .Where(hdma => hdma.HoaDonId == Id)
+                .Where(hdma => hdma.MaOrder == Id)
                 .Select(hdma => new MonAnInHoaDonResponse
                 {
                     MonAnId = hdma.MonAnId,
@@ -122,7 +128,7 @@ namespace Repositories.Implementations
 
             // Lấy danh sách các set món ăn trong hóa đơn
             hoaDon.SetMonAn = await _context.HoaDonSetMonAn
-                .Where(hdso => hdso.HoaDonId == Id)
+                .Where(hdso => hdso.MaOrder == Id)
                 .Select(hdso => new SetInHoaDonResponse
                 {
                     SetId = hdso.SetId,

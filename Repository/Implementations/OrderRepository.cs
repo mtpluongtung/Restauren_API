@@ -38,8 +38,7 @@ namespace Repositories.Implementations
             }
             catch (Exception ex)
             {
-                var message = ex.Message;
-                return null;
+              throw ex;
             }
         }
 

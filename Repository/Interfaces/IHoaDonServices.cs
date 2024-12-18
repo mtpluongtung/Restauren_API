@@ -15,5 +15,6 @@ namespace Repositories.Interfaces
         Task<BaseResponse<HoaDonResponse>> Update(UpdateHoaDonRequest reuqest);
         Task<BaseResponse<HoaDonResponse>> Delete(Guid Id);
         Task<BaseResponse<HoaDonResponse>> GetById(Guid Id);
+        Task<List<HoaDonResponse>> GetAll();
     }
 }

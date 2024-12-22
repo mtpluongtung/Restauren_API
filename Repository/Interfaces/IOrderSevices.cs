@@ -12,6 +12,7 @@ namespace Repositories.Interfaces
     {
         Task<OrderResponse> Create(CreateOrder createOrder);
         Task<List<MenuResponse>> GetMenu();
+        Task<OrderResponse> GetByBanId(long id);
     }
     
 }

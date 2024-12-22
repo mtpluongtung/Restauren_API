@@ -9,7 +9,7 @@ public partial class Ban
 
     [Key]
     public long Id { get; set; }
-    public string? TenBan { get; set; }
+    public string TenBan { get; set; } = string.Empty;
     public bool TrangThai { get; set; }
     public string? Tang { get; set; }
     public int SoNguoi { get; set; }

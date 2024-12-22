@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
 {
 	options.AddPolicy("AllowSpecificOrigins", policy =>
 	{
-		policy.WithOrigins("http://localhost:4200") // Địa chỉ frontend
+		policy.WithOrigins(["http://localhost:4200", "https://049d-171-241-52-65.ngrok-free.app"]) // Địa chỉ frontend
 			  .AllowAnyHeader()
 			.AllowAnyMethod()
 			.AllowCredentials(); // Cho phép gửi cookie/credentials                 // Cho phép mọi phương thức (GET, POST, PUT, DELETE)

@@ -28,12 +28,8 @@ namespace Restaurant_API.Controllers
             var result = await _hoaDonServices.Delete(Id);
             return Ok(result);
         }
-        [HttpPost("Themmon")]
-        public async Task<IActionResult> ThemMon()
-        {
-            return null;
-        }
-        [HttpGet("Id")]
+      
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetHoaDon(Guid id)
         {
             var result = await _hoaDonServices.GetById(id);
@@ -45,5 +41,29 @@ namespace Restaurant_API.Controllers
             var result = await _hoaDonServices.GetAll(request);
             return Ok(result);
         }
-    }
+		[HttpPost("doanh-thu-hoa-don")]
+		public async Task<IActionResult> DoanhThu([FromBody] GetByDateRequest request)
+		{
+			var result = await _hoaDonServices.DoanhThuHoaDon(request);
+			return Ok(result);
+		}
+		[HttpGet("doanh-thu-chi-tiet")]
+		public async Task<IActionResult> DoanhThuChiTiet(DateTime request)
+		{
+			var result = await _hoaDonServices.DoanhThuChiTiet(request);
+			return Ok(result);
+		}
+		[HttpGet("chi-tiet-hoa-don")]
+		public async Task<IActionResult> GetByDate(Guid mahoadon)
+		{
+			var result = await _hoaDonServices.HoaDonChiTiet(mahoadon);
+			return Ok(result);
+		}
+        [HttpGet("thanh-toan")]
+        public async Task<IActionResult> ThanhToan(long id)
+		{
+			var result = await _hoaDonServices.ThanhToan(id);
+			return Ok(result); 
+		}
+	}
 }

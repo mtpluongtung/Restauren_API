@@ -7,9 +7,9 @@ public partial class SetMonAn
 {
     public long Id { get; set; }
 
-    public long? MonAnId { get; set; }
+    public long MonAnId { get; set; }
 
-    public long? SetId { get; set; }
+    public long SetId { get; set; }
 
     public string? TenMonAn { get; set; }
 

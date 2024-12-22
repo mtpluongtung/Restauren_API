@@ -16,5 +16,9 @@ namespace Repositories.Interfaces
         Task<BaseResponse<HoaDonResponse>> Delete(Guid Id);
         Task<BaseResponse<HoaDonResponse>> GetById(Guid Id);
 		Task<PagedResult<HoaDonResponse>> GetAll(GetHoaDonRequest request);
-    }
+        Task<List<DoanhThuHoaDon>> DoanhThuHoaDon(GetByDateRequest request);
+        Task<List<DoanhThuChiTiet>> DoanhThuChiTiet(DateTime request);
+        Task<DoanhThuChiTiet> HoaDonChiTiet(Guid mahoadon);
+        Task<bool> ThanhToan(long id);
+	}
 }

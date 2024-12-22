@@ -33,5 +33,11 @@ namespace Restaurant_API.Controllers
         {
             return Ok(request);
         }
+        [HttpGet("{banId}")]
+        public async Task<IActionResult> GetOrder(long banId)
+		{
+			var result = await _orderSevices.GetByBanId(banId);
+			return Ok(result);
+		}
     }
 }

@@ -12,6 +12,6 @@ namespace Models.Entities
         public Guid MaOrder { get; set; }
         public long MonAnId { get; set; }
         public int SoLuong {  get; set; }
-        public double ThanhTien { get; set; }
+        public decimal ThanhTien { get; set; }
     }
 }

@@ -42,7 +42,13 @@ namespace Repositories.Implementations
             }
         }
 
-        public async Task<List<MenuResponse>> GetMenu()
+		public async Task<OrderResponse> GetByBanId(long id)
+		{
+			var result = await _context.Order.Where(x => x.BanId == id).OrderByDescending(x=> x.CreatedDate).FirstOrDefaultAsync();
+            return result.Adapt<OrderResponse>();   
+		}
+
+		public async Task<List<MenuResponse>> GetMenu()
         {
             var result = new List<MenuResponse>();
             var monAn = await _context.MonAn.Select(x => new MenuResponse
@@ -66,5 +72,6 @@ namespace Repositories.Implementations
             result.AddRange(set);
             return result.OrderByDescending(x => x.Type).ToList();
         }
+
     }
 }

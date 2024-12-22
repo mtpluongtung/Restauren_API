@@ -14,6 +14,7 @@ namespace Restaurant_API.Register
             services.AddScoped<ISetServices, SetRepository>();
             services.AddScoped<INhanVienServices, NhanVienRepository>();
             services.AddScoped<IOrderSevices, OrderRepository>();
+            services.AddScoped<IBepServices, BepRepository>();
         }
     }
 }

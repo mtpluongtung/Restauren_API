@@ -1,4 +1,5 @@
-﻿using Models.DTO.Request.Order;
+﻿using Models.DTO.Request.Bep;
+using Models.DTO.Request.Order;
 using Models.DTO.Response;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace Repositories.Interfaces
         Task<OrderResponse> Create(CreateOrder createOrder);
         Task<List<MenuResponse>> GetMenu();
         Task<OrderResponse> GetByBanId(long id);
+        Task<bool> KhachHangThemMon(BepCreateRequest request);
     }
     
 }

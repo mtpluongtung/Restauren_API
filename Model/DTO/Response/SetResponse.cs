@@ -16,7 +16,6 @@ namespace Models.DTO.Response
         public decimal? Gia { get; set; }
 
         public string? Url { get; set; }
-
         public List<MonAnResponse> MonAn { get; set; } = new List<MonAnResponse>();
     }
     

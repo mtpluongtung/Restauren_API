@@ -15,7 +15,7 @@ namespace Entities.DTO.Response
         public decimal? Gia { get; set; }
 
         public bool? IsActive { get; set; }
-
-        public string? Url { get; set; }
+		public int SoLuong { get; set; }
+		public string? Url { get; set; }
     }
 }

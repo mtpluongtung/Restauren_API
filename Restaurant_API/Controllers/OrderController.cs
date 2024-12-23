@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Entities.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models.DTO.Request.Bep;
 using Models.DTO.Request.Order;
 using Models.Entities;
 using Repositories.Interfaces;
@@ -29,7 +31,7 @@ namespace Restaurant_API.Controllers
             return Ok(result);
         }
         [HttpPost("/them-mon")]
-        public async Task<IActionResult> ThemMon(OrderThemRequest request)
+        public async Task<IActionResult> ThemMon(BepCreateRequest request)
         {
             return Ok(request);
         }
@@ -39,5 +41,11 @@ namespace Restaurant_API.Controllers
 			var result = await _orderSevices.GetByBanId(banId);
 			return Ok(result);
 		}
-    }
+		[HttpPost("goi-mon")]
+		public async Task<IActionResult> GoiMon(BepCreateRequest request)
+		{
+            var result = await _orderSevices.KhachHangThemMon(request);
+            return Ok(result);
+		}
+	}
 }

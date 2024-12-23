@@ -45,7 +45,7 @@ namespace Restaurant_API.Middleware
                 var result = new ErrorModel
                 {
                     Code = 500,
-                    Message = exception.Message,
+                    Message = "Đã xảy ra lỗi vui lòng liên hệ nhân viên phục vụ ",
                     Status = false
                 };
 

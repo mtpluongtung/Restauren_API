@@ -14,6 +14,7 @@ public partial class MonAn
 	public bool? IsActive { get; set; }
 
 	public string? Url { get; set; }
+	public int Loai { get; set; }
 
 	public string? CreatedBy { get; set; } = string.Empty;
 

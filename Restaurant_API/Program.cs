@@ -1,6 +1,7 @@
 ﻿using Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
 using Models.DTO.Configs;
 using Restaurant_API;
 using Restaurant_API.Middleware;
@@ -48,4 +49,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<HubContext>("/HubContext");
+app.UseStaticFiles(new StaticFileOptions
+{
+	FileProvider = new PhysicalFileProvider(
+		Path.Combine(Directory.GetCurrentDirectory(), "Upload")),
+	RequestPath = "/Upload"
+});
 app.Run();

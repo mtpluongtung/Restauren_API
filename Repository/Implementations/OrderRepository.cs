@@ -59,7 +59,7 @@ namespace Repositories.Implementations
 				Name = x.Name,
 				Url = x.Url,
 				Gia = x.Gia,
-				Type = TypeMenu.MON_AN
+				Type = x.Loai
 			}
 			).ToListAsync();
 			var set = await _context.Set.Select(x => new MenuResponse

@@ -1,5 +1,7 @@
 ﻿using Entities.DTO.Request.MonAn;
 using Entities.DTO.Response;
+using Models.DTO.Request.MonAn;
+using Models.DTO.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +12,9 @@ namespace Repositories.Interfaces
 {
     public interface IMonAnServices
     {
-        Task<BaseResponse<MonAnResponse>> Create(CreateMonAnRequest request);
+        Task<BaseResponse<MonAnResponse>> Create(CreateOrUpdateMonAnRequest request);
         Task<BaseResponse<MonAnResponse>> Update(UpdateMonAnRequest request);
         Task<BaseResponse<MonAnResponse>> Delete(long id);
-        Task<BaseResponse<List<MonAnResponse>>> GetAll();
+        Task<BaseResponse<PagedResult<MonAnResponse>>> GetAll(SearchMonAnRequest request);
     }
 }

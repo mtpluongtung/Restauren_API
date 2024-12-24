@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,10 +14,11 @@ namespace Entities.DTO.Request.MonAn
         public string? Name { get; set; }
 
         public decimal? Gia { get; set; }
+        public int Type { get; set; }
 
         public bool? IsActive { get; set; }
 
-        public string? Url { get; set; }
+        public IFormFile? File { get; set; }
 
     }
 }

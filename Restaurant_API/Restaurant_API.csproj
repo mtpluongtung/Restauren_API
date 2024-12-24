@@ -29,4 +29,8 @@
     <ProjectReference Include="..\Repository\Repositories.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Upload\AnhMonAn\" />
+  </ItemGroup>
+
 </Project>

@@ -8,7 +8,7 @@ namespace Models.DTO.Response
 {
 	public class DoanhThuChiTiet
 	{
-		public string MaHoaDon { get; set; }
+		public Guid MaOrder { get; set; }
 		public decimal TongTien { get; set; }
 		public List<ChiTietHoaDon> ChiTietHoaDon { get; set; }
 

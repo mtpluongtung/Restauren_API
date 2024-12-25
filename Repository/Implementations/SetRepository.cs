@@ -4,6 +4,7 @@ using Entities.DTO.Response;
 using Entities.Entities;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Models.DTO.Request.MonAn;
 using Models.DTO.Request.Set;
 using Models.DTO.Response;
 using Repositories.Interfaces;
@@ -12,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Repositories.Implementations
 {
@@ -57,9 +59,9 @@ namespace Repositories.Implementations
         }
 
 
-        public async Task<BaseResponse<List<SetResponse>>> GetAll()
+        public async Task<PagedResult<SetResponse>> GetAll(SearchMonAnRequest request)
         {
-            var setWithMonAns = await _context.Set
+            var setWithMonAns =  _context.Set
                                                 .Include(s => s.SetMonAn)  // Include bảng trung gian SetMonAn
                                                 .ThenInclude(sma => sma.MonAn)  // Include bảng MonAn từ SetMonAn
                                                 .Select(s => new SetResponse
@@ -74,14 +76,29 @@ namespace Repositories.Implementations
                                                         Name = sma.MonAn.Name  // Lấy thông tin từ MonAn
                                                     }).ToList()
                                                 })
-                                                .ToListAsync();
+                                                ;
+            var totalItems = await setWithMonAns.CountAsync();
 
-            if (setWithMonAns == null || !setWithMonAns.Any())
+            // 3. Lấy dữ liệu theo trang (PageNumber và PageSize)
+            var items = await setWithMonAns.Where(x => string.IsNullOrEmpty(request.Text) || x.Name.Contains(request.Text))
+                .Skip((request.Page - 1) * request.PageSize) // Bỏ qua các mục của các trang trước
+                .Take(request.PageSize) // Lấy số lượng mục theo kích thước trang
+                .ToListAsync();
+
+            // 4. Chuyển đổi sang DTO (Data Transfer Object)
+            var result = items.Adapt<List<SetResponse>>();
+
+            // 5. Chuẩn bị dữ liệu phân trang
+            var pagedResult = new PagedResult<SetResponse>
             {
-                throw new BaseException("Không có set nào.");
-            }
+                TotalRecords = totalItems,
+                PageSize = request.PageSize,
+                PageNumber = request.Page,
+                Items = result
+            };
 
-            return new BaseResponse<List<SetResponse>>().Success(setWithMonAns);
+            // 6. Trả về kết quả phân trang
+            return pagedResult;
         }
 
         public async Task<SetResponse> GetById(long Id)

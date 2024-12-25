@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models.DTO.Request.MonAn;
 using Models.DTO.Request.Set;
 using Repositories.Interfaces;
 
@@ -16,9 +17,9 @@ namespace Restaurant_API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]SearchMonAnRequest request)
         {
-            var reuslt = await _setServices.GetAll();
+            var reuslt = await _setServices.GetAll(request);
             return Ok(reuslt);
         }
 

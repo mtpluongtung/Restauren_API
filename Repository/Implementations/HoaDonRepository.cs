@@ -401,6 +401,16 @@ namespace Repositories.Implementations
             var hoaDon = await _context.HoaDon.Where(x => x.Id == id && !x.ThanhToan).FirstOrDefaultAsync();
             if (hoaDon != null)
             {
+                var order = await _context.Order.FindAsync(hoaDon.MaOrder);
+                if(order != null)
+                {
+                    var ban = await _context.Ban.FindAsync(order.BanId);
+                    if(ban != null)
+                    {
+                        ban.TrangThai = false;
+                        _context.Ban.Update(ban);
+                    }
+                }
                 hoaDon.ThanhToan = true;
                 await _context.SaveChangesAsync();
                 return true;

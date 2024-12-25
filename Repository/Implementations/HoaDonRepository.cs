@@ -302,7 +302,7 @@ namespace Repositories.Implementations
 
         public async Task<List<DoanhThuHoaDon>> DoanhThuHoaDon(GetByDateRequest request)
         {
-            var dailyRevenue = await _context.HoaDon.Where(x => x.NgayTao >= request.From && x.NgayTao <= request.To && x.ThanhToan)
+            var dailyRevenue = await _context.HoaDon.Where(x => x.NgayTao.Date >= request.From.Date && x.NgayTao.Date <= request.To.Date && x.ThanhToan)
            .GroupBy(h => h.NgayTao.Date)
             .Select(g => new DoanhThuHoaDon
             {
@@ -319,7 +319,7 @@ namespace Repositories.Implementations
                 from hd in _context.HoaDon
                 join ma in _context.HoaDonMonAn on hd.MaOrder equals ma.MaOrder
                 join monAn in _context.MonAn on ma.MonAnId equals monAn.Id
-                where hd.NgayTao==request
+                where hd.NgayTao.Date==request.Date
                 select new
                 {
                     hd.MaOrder,
@@ -340,7 +340,7 @@ namespace Repositories.Implementations
                 join ma in _context.HoaDonSetMonAn on hd.MaOrder equals ma.MaOrder
                 join set in _context.Set on ma.SetId equals set.Id
                 join od in _context.Order on ma.MaOrder equals od.MaOrder
-                where hd.NgayTao == request
+                where hd.NgayTao.Date == request.Date
                 select new
                 {
                     hd.MaOrder,

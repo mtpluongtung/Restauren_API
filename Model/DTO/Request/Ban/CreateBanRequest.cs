@@ -8,11 +8,8 @@ namespace Entities.DTO.Request.Ban
 {
     public class CreateBanRequest
     {
-        public string? TenBan { get; set; }
-        public int TrangThai { get; set; }
-        public string? Tang { get; set; }
-        public int SoNguoi { get; set; }
-        public int SoGhe { get; set; }
+        public string TenBan { get; set; } = string.Empty;
+        public string Tang { get; set; } = string.Empty;
 
     }
 }

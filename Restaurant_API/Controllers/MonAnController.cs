@@ -37,7 +37,7 @@ namespace Restaurant_API.Controllers
 			return Ok(result);
 		}
 		[HttpGet]
-		public async Task<IActionResult> GetAll([FromQuery] SearchMonAnRequest request)
+		public async Task<IActionResult> GetAll([FromQuery] BaseSearchRequest request)
 		{
 			var result = await _monAnServices.GetAll(request);
 			return Ok(result);

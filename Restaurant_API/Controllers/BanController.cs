@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTO.Request.Ban;
+using Models.DTO.Request.MonAn;
 using Repositories.Interfaces;
 
 namespace Restaurant_API.Controllers
@@ -17,7 +18,7 @@ namespace Restaurant_API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateBanRequest request)
+        public async Task<IActionResult> Create([FromBody]CreateBanRequest request)
         {
             var result = await _banService.Create(request);
             return Ok(result);
@@ -29,8 +30,13 @@ namespace Restaurant_API.Controllers
             var result  = await  _banService.GetAll();
             return Ok(result);
         }
-
-        [HttpDelete("{Id}")]
+		[HttpGet("table")]
+		public async Task<IActionResult> GetAll([FromQuery] BaseSearchRequest request)
+		{
+			var result = await _banService.GetTable(request);
+			return Ok(result);
+		}
+		[HttpDelete("{Id}")]
         public async Task<IActionResult>Delete(long Id)
         {
             var result = await _banService.Delete(Id);

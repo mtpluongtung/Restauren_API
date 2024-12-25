@@ -1,6 +1,8 @@
 ﻿using Entities.DTO.Request.Ban;
 using Entities.DTO.Response;
 using Models.DTO.Request.Ban;
+using Models.DTO.Request.MonAn;
+using Models.DTO.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +17,6 @@ namespace Repositories.Interfaces
         Task<BaseResponse<BanResponse>> Update(UpdateBanReuquest request);
         Task<BaseResponse<BanResponse>> Delete(long id);
         Task<BaseResponse<List<BanResponse>>> GetAll();
-    }
+		Task<PagedResult<BanResponse>> GetTable(BaseSearchRequest request);
+	}
 }

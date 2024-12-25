@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models.DTO.Request.MonAn
 {
-	public class SearchMonAnRequest
+	public class BaseSearchRequest
 	{
 		public string? Text { get; set; }
 		public int Page { get; set; }

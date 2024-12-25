@@ -68,7 +68,7 @@ namespace Repositories.Implementations
 			return new BaseResponse<MonAnResponse>().Success(monAn.Adapt<MonAnResponse>());
 		}
 
-		public async Task<BaseResponse<PagedResult<MonAnResponse>>> GetAll(SearchMonAnRequest request)
+		public async Task<BaseResponse<PagedResult<MonAnResponse>>> GetAll(BaseSearchRequest request)
 		{
 			// 1. Lấy danh sách món ăn từ database
 			var query = _context.MonAn.AsQueryable();

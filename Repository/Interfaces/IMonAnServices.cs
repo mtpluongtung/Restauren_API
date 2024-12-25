@@ -15,6 +15,6 @@ namespace Repositories.Interfaces
         Task<BaseResponse<MonAnResponse>> Create(CreateOrUpdateMonAnRequest request);
         Task<BaseResponse<MonAnResponse>> Update(UpdateMonAnRequest request);
         Task<BaseResponse<MonAnResponse>> Delete(long id);
-        Task<BaseResponse<PagedResult<MonAnResponse>>> GetAll(SearchMonAnRequest request);
+        Task<BaseResponse<PagedResult<MonAnResponse>>> GetAll(BaseSearchRequest request);
     }
 }

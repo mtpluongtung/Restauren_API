@@ -15,7 +15,7 @@ namespace Repositories.Interfaces
         Task<BaseResponse<SetResponse>> Create(CreateSetRequest request);
         Task<BaseResponse<SetResponse>> Update(UpdateSetRequest request);
         Task<BaseResponse<SetResponse>> Delete(long Id);
-        Task<PagedResult<SetResponse>> GetAll(SearchMonAnRequest request);
+        Task<PagedResult<SetResponse>> GetAll(BaseSearchRequest request);
         Task<SetResponse> GetById(long Id);
 
     }

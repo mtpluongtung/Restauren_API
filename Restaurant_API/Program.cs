@@ -15,11 +15,13 @@ builder.Services.AddDbContextPool<RestaurentContext>(option =>
 option.UseSqlServer(connectionString, providerOptions => providerOptions.CommandTimeout(30))
 );
 // Thêm chính sách CORS
+var requestOrigins = builder.Configuration.GetSection("WithOrigins").Value;
+
 builder.Services.AddCors(options =>
 {
 	options.AddPolicy("AllowSpecificOrigins", policy =>
 	{
-		policy.WithOrigins(["http://localhost:4200", "https://049d-171-241-52-65.ngrok-free.app"]) // Địa chỉ frontend
+		policy.WithOrigins(requestOrigins.Split(",")) // Địa chỉ frontend
 			  .AllowAnyHeader()
 			.AllowAnyMethod()
 			.AllowCredentials(); // Cho phép gửi cookie/credentials                 // Cho phép mọi phương thức (GET, POST, PUT, DELETE)
@@ -37,11 +39,8 @@ var app = builder.Build();
 
 app.UseCors("AllowSpecificOrigins");
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-	app.UseSwagger();
-	app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 

@@ -15,12 +15,13 @@ builder.Services.AddDbContextPool<RestaurentContext>(option =>
 option.UseSqlServer(connectionString, providerOptions => providerOptions.CommandTimeout(30))
 );
 // Thêm chính sách CORS
+var requiredOrigins = builder.Configuration.GetSection("RequestOrigin").Get<string>();
 builder.Services.AddCors(options =>
 {
 	options.AddPolicy("AllowSpecificOrigins", policy =>
 	{
-		policy.WithOrigins(["http://localhost:4200", "https://049d-171-241-52-65.ngrok-free.app"]) // Địa chỉ frontend
-			  .AllowAnyHeader()
+		policy.WithOrigins("http://gunsan.vn") // Địa chỉ frontend
+			 .AllowAnyHeader()
 			.AllowAnyMethod()
 			.AllowCredentials(); // Cho phép gửi cookie/credentials                 // Cho phép mọi phương thức (GET, POST, PUT, DELETE)
 	});

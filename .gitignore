@@ -11,3 +11,7 @@
 /Repository/obj
 /Restaurant_API/bin/Debug/net8.0
 /Restaurant_API/obj
+/Business/bin/Release/net8.0
+/Model/bin/Release/net8.0
+/Repository/bin/Release/net8.0
+/Restaurant_API/bin/Release/net8.0

@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTO.Request.Authe;
 using Repository.Interfaces;
+using Restaurant_API.Middleware;
 
 namespace Restaurant_API.Controllers
 {
@@ -15,24 +16,18 @@ namespace Restaurant_API.Controllers
         {
             _authenticationService = authenticationService;
         }
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> Login(LoginParam param)
         {
             var result = await _authenticationService.Login(param);
             return Ok(result);
         }
-        [HttpPost]
-        public async Task<IActionResult> RefreshToken()
+        [HttpPost("refresh-token")]
+		[Authorize]
+		public async Task<IActionResult> RefreshToken()
         {
-            var result = "";
-            if (result == null)
-            {
-                return new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
-            }
-            else
-            {
-                return Ok(result);
-            }
-        }
+			var result = await _authenticationService.RefreshToken();
+			return Ok(result);
+		}
     }
 }

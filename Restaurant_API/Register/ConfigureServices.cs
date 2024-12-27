@@ -1,5 +1,6 @@
 ﻿using Repositories.Implementations;
 using Repositories.Interfaces;
+using Repository.Interfaces;
 
 namespace Restaurant_API.Register
 {
@@ -15,6 +16,7 @@ namespace Restaurant_API.Register
             services.AddScoped<INhanVienServices, NhanVienRepository>();
             services.AddScoped<IOrderSevices, OrderRepository>();
             services.AddScoped<IBepServices, BepRepository>();
+            services.AddScoped<IAutheServices, AuthServicesRepository>();
         }
     }
 }

@@ -2,13 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
+using Models.Appsettings;
 using Models.DTO.Configs;
 using Restaurant_API;
 using Restaurant_API.Middleware;
 using Restaurant_API.Register;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("SqlConnection");
 builder.Services.AddDbContextPool<RestaurentContext>(option =>
@@ -20,7 +21,7 @@ builder.Services.AddCors(options =>
 {
 	options.AddPolicy("AllowSpecificOrigins", policy =>
 	{
-		policy.WithOrigins("http://gunsan.vn") // Địa chỉ frontend
+		policy.WithOrigins(requiredOrigins.Split(";")) // Địa chỉ frontend
 			 .AllowAnyHeader()
 			.AllowAnyMethod()
 			.AllowCredentials(); // Cho phép gửi cookie/credentials                 // Cho phép mọi phương thức (GET, POST, PUT, DELETE)

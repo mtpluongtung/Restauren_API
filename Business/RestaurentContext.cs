@@ -15,8 +15,8 @@ namespace Business
             : base(options)
         {
         }
-
-        public virtual DbSet<Ban> Ban { get; set; }
+		public virtual DbSet<User> Users { get; set; }
+		public virtual DbSet<Ban> Ban { get; set; }
 
         public virtual DbSet<MonAn> MonAn { get; set; }
 

@@ -8,7 +8,7 @@ namespace Restaurant_API.Register
     {
         public static void AddServices(IServiceCollection services)
         {
-            // Đăng ký service IMonAnServices và MonAnServices
+            // Đăng ký service 
             services.AddScoped<IMonAnServices, MonAnRespository>();
             services.AddScoped<IBanServices, BanRespository>();
             services.AddScoped<IHoaDonServices, HoaDonRepository>();
@@ -17,6 +17,8 @@ namespace Restaurant_API.Register
             services.AddScoped<IOrderSevices, OrderRepository>();
             services.AddScoped<IBepServices, BepRepository>();
             services.AddScoped<IAutheServices, AuthServicesRepository>();
+            services.AddScoped<ICaLamViec, CaLamViecRepository>();
+
         }
     }
 }

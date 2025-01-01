@@ -4,18 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.DTO.Response
+namespace Models.DTO.Request.NhanVien
 {
-    public class NhanVienResponse
-    {
+	public class UpdateNhanVienRequest
+	{
 		public long Id { get; set; }
-		public string? TenNhanvien { get; set; }
-		public string Email { get; set; }
+		public string TenNhanvien { get; set; }
+		public string MaNhanvien { get; set; }
 		public string Phone { get; set; }
 		public string Address { get; set; }
-		public string? MaNhanvien { get; set; }
-		public string Token { get; set; }
-		public int? CaId { get; set; }
+		public string Email { get; set; }
 		public string ViTri { get; set; }
 		public int? CapBac { get; set; }
 	}

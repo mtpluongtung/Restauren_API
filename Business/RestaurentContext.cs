@@ -37,8 +37,8 @@ namespace Business
         public virtual DbSet<Order> Order { get; set; }
 
         public virtual DbSet<Bep> Beps { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+		public virtual DbSet<CaLamViec> CaLamViecs { get; set; }
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Ban>(entity =>
             {

@@ -38,6 +38,7 @@ namespace Business
 
         public virtual DbSet<Bep> Beps { get; set; }
 		public virtual DbSet<CaLamViec> CaLamViecs { get; set; }
+        public virtual DbSet<CaLamViecNhanVien> CaLamViecNhanVien { get; set; }
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Ban>(entity =>

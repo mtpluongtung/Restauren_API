@@ -9,8 +9,9 @@ namespace Models.Entities
     public partial class ChamCong
     {
         public long Id { get; set; }
-        public string MaNhanVien { get; set; }
+        public string MaNhanVien { get; set; }=string.Empty;
         public DateTime? CheckIn { get; set; } = null;
         public DateTime? CheckOut { get; set; } = null;
+        public bool TrangThai { get; set; } = false;
     }
 }

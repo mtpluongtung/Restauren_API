@@ -8,6 +8,7 @@ namespace Models.DTO.Request.CaLamViec
 {
 	public class CreateCaLamViec
 	{
+		public long Id { get; set; }
 		public int GioBatDauCa { get; set; }
 		public int GioKetThucCa { get; set; }
 		public string LoaiCa { get; set; }

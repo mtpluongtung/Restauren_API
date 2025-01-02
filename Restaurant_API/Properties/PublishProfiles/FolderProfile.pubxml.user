@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>F:\Project\Restaurent\Restaurant_API\Restaurant_API\bin\Release\net8.0\publish\</_PublishTargetUrl>
-    <History>True|2024-12-27T16:59:51.1832203Z||;True|2024-12-27T19:49:20.6419277+07:00||;</History>
+    <History>True|2025-01-02T15:02:03.2386364Z||;True|2024-12-27T23:59:51.1832203+07:00||;True|2024-12-27T19:49:20.6419277+07:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>

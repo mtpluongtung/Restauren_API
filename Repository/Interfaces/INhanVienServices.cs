@@ -16,7 +16,7 @@ namespace Repositories.Interfaces
 		Task<bool> CheckOut(string token);
 		Task<string> GenCheckOut(string manhanvien);
 		Task<string> GenCheckIn(string manhanvien);
-		Task<List<ChamCongNhanVien>> GetChamCong();
+		Task<PagedResult<ChamCongNhanVien>> GetChamCong(SearchChamCong request);
 		Task<PagedResult<NhanVienResponse>> GetNhanVien(BaseSearchRequest request);
 		Task<bool> Delete(long Id);
 	}

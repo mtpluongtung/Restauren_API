@@ -31,10 +31,11 @@ namespace Repositories.Implementations
 		private readonly BaseConfig _config;
 		private readonly RestaurentContext _context;
 		public NhanVienRepository(
-			IOptions<BaseConfig> config, RestaurentContext context)
+			IOptions<BaseConfig> config, RestaurentContext context, IHttpContextAccessor httpContextAccessor)
 		{
 			_config = config.Value;
 			_context = context;
+			_contextAccessor = httpContextAccessor;
 		}
 		public async Task<bool> CheckIn(string token)
 		{
@@ -54,6 +55,7 @@ namespace Repositories.Implementations
 			var chamCong = new ChamCong();
 			chamCong.CheckIn = date;
 			chamCong.MaNhanVien = GetManhanvienFromToken(token);
+			chamCong.TrangThai = false;
 			_context.ChamCong.Add(chamCong);
 			await _context.SaveChangesAsync();
 			return true;
@@ -62,7 +64,7 @@ namespace Repositories.Implementations
 		public async Task<bool> CheckOut(string token)
 		{
 
-			if (_config.Ip != _contextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()) throw new BaseException("Vui lòng truy cập từ địa chỉ nội bộ");
+			if (_config.Ip == _contextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()) throw new BaseException("Vui lòng truy cập từ địa chỉ nội bộ");
 			var manhanvien = GetManhanvienFromToken(token);
 			var date = DateTime.Now;
 			var checkOut = await _context.ChamCong.Where(x =>
@@ -122,24 +124,40 @@ namespace Repositories.Implementations
 			return Task.FromResult(_config.CheckOutUrl + token);
 		}
 
-		public Task<List<ChamCongNhanVien>> GetChamCong()
+		public async Task<PagedResult<ChamCongNhanVien>> GetChamCong(SearchChamCong request)
 		{
-			var nhanVien = from nv in _context.NhanVien
-						   join cc in _context.ChamCong on nv.MaNhanvien equals cc.MaNhanVien
-						   select new ChamCongNhanVien
-						   {
-							   Id = nv.Id,
-							   Name = nv.TenNhanvien,
-							   infoChamCongs = new List<InfoChamCong>
-							   {
-								   new InfoChamCong
-								   {
-									   CheckIn = cc.CheckIn,
-									   CheckOut = cc.CheckOut
-								   }
-							   }
-						   };
-			return nhanVien.ToListAsync();
+
+			// 1. Lấy danh sách món ăn từ database
+			var query = from cc in _context.ChamCong
+						join nv in _context.NhanVien on cc.MaNhanVien equals nv.MaNhanvien
+						where 
+						(string.IsNullOrEmpty(request.Text) ||
+						nv.TenNhanvien.Contains(request.Text) ||
+						nv.MaNhanvien.Contains(request.Text)) && 
+						(!request.From.HasValue || cc.CheckIn.Value.Date >= request.From.Value.Date) &&
+						(!request.To.HasValue || cc.CheckIn.Value.Date <= request.To.Value.Date)
+						select new ChamCongNhanVien
+						{
+							Id = cc.Id,
+							MaNhanVien = cc.MaNhanVien,
+							TenNhanVien = nv.TenNhanvien,
+							CheckIn = cc.CheckIn,
+							CheckOut = cc.CheckOut,
+							TotalTime = cc.CheckOut != null ? (cc.CheckOut.Value - cc.CheckIn.Value).TotalHours : 0,
+							TrangThai = cc.TrangThai
+						};
+
+			// 2. Tính tổng số lượng phần tử (TotalItems)
+			var totalItems = await query.CountAsync();
+			var result = await query.ToListAsync();
+			var pagedResult = new PagedResult<ChamCongNhanVien>
+			{
+				TotalRecords = totalItems,
+				PageSize = request.PageSize,
+				PageNumber = request.Page,
+				Items = result
+			};
+			return pagedResult;
 		}
 
 		private string GenerateToken(string manhanvien)

@@ -9,12 +9,12 @@ namespace Models.DTO.Response
 	public class ChamCongNhanVien
 	{
 		public long Id { get; set; }
-		public string Name { get; set; }
-		public List<InfoChamCong> infoChamCongs { get; set; } = new List<InfoChamCong>();
-	}
-	public class InfoChamCong
-	{
+		public string TenNhanVien { get; set; }
+		public string MaNhanVien { get; set; }
 		public DateTime? CheckIn { get; set; }
 		public DateTime? CheckOut { get; set; }
+		public double TotalTime { get; set; }
+		public bool TrangThai { get; set; }
 	}
+	
 }

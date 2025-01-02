@@ -49,10 +49,10 @@ namespace Restaurant_API.Controllers
 			return Ok(reslut);
 		}
 		
-		[HttpGet("GetChamCong")]
-		public async Task<IActionResult> GetChamCong()
+		[HttpPost("GetChamCong")]
+		public async Task<IActionResult> GetChamCong([FromBody] SearchChamCong request)
 		{
-			var result = await _nhanVienServices.GetChamCong();
+			var result = await _nhanVienServices.GetChamCong(request);
 			return Ok(result);
 		}
 		[HttpGet()]

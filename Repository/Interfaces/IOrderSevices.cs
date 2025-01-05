@@ -15,6 +15,8 @@ namespace Repositories.Interfaces
         Task<List<MenuResponse>> GetMenu();
         Task<OrderResponse> GetByBanId(long id);
         Task<bool> KhachHangThemMon(BepCreateRequest request);
-    }
+        Task<bool> KhachHangThemMonTinhTien(ThemMonTinhTien request);
+
+	}
     
 }

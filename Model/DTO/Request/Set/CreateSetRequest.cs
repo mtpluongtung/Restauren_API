@@ -11,6 +11,7 @@ namespace Models.DTO.Request.Set
 {
     public class CreateSetRequest
     {
+        public long Id { get; set; }
         public string? Name { get; set; }
         public decimal? Gia { get; set; }
         public IFormFile? File { get; set; }

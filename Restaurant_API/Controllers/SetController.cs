@@ -44,12 +44,6 @@ namespace Restaurant_API.Controllers
 			}
 		}
 
-		[HttpPut]
-		public async Task<IActionResult> Update(UpdateSetRequest request)
-		{
-			var result = await _setServices.Update(request);
-			return Ok(result);
-		}
 		[HttpDelete("{Id}")]
 		public async Task<IActionResult> Delete(long Id)
 		{

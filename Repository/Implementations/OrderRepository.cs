@@ -89,5 +89,35 @@ namespace Repositories.Implementations
 			await _context.SaveChangesAsync();
 			return true;
 		}
+		public async Task<bool> KhachHangThemMonTinhTien(ThemMonTinhTien request)
+		{
+			var order = await _context.Order.Where(x => x.MaOrder == request.MaOrder).OrderByDescending(x => x.CreatedDate).FirstOrDefaultAsync();
+			if (order == null) throw new BaseException("Mã Order không tồn tại . Vui lòng liên hệ nhân viên");
+
+			var hoadon = await _context.HoaDon.FirstOrDefaultAsync(x=> x.MaOrder == request.MaOrder);
+			if(hoadon != null)
+			{
+				hoadon.TongTien += request.ThanhTien;
+				_context.HoaDon.Update(hoadon);
+			}
+			var hoaDonMonAn = new HoaDonMonAn
+			{
+				MaOrder = request.MaOrder,
+				MonAnId = request.IdMonAn,
+				SoLuong = request.SoLuong,
+				ThanhTien = request.ThanhTien
+			};
+			var bep = new Bep
+			{
+				IdMonAn = request.IdMonAn,
+				SoLuong = request.SoLuong,
+				BanId = order.BanId,
+			};
+			_context.HoaDonMonAn.Add(hoaDonMonAn);
+		
+			await _context.Beps.AddAsync(bep);
+			await _context.SaveChangesAsync();
+			return true;
+		}
 	}
 }

@@ -47,5 +47,11 @@ namespace Restaurant_API.Controllers
             var result = await _orderSevices.KhachHangThemMon(request);
             return Ok(result);
 		}
+		[HttpPost("goi-mon-tinh-tien")]
+		public async Task<IActionResult> GoiMonTinhTien(ThemMonTinhTien request)
+		{
+			var result = await _orderSevices.KhachHangThemMonTinhTien(request);
+			return Ok(result);
+		}
 	}
 }

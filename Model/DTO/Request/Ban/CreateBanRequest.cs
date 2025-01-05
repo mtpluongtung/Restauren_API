@@ -8,6 +8,7 @@ namespace Entities.DTO.Request.Ban
 {
     public class CreateBanRequest
     {
+        public long Id { get; set; }
         public string TenBan { get; set; } = string.Empty;
         public string Tang { get; set; } = string.Empty;
 

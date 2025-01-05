@@ -27,6 +27,10 @@ namespace Repositories.Implementations
 		}
 		public async Task<BaseResponse<SetResponse>> Create(CreateSetRequest request)
 		{
+			if(request.Id != 0)
+			{
+			 return await Update(request);
+			}
 			using var transaction = await _context.Database.BeginTransactionAsync();
 			try
 			{
@@ -92,7 +96,8 @@ namespace Repositories.Implementations
 													MonAn = s.SetMonAn.Select(sma => new MonAnResponse
 													{
 														Id = sma.MonAn.Id,
-														Name = sma.MonAn.Name  // Lấy thông tin từ MonAn
+														Name = sma.MonAn.Name,
+														Url = sma.MonAn.Url
 													}).ToList()
 												})
 												;
@@ -147,14 +152,17 @@ namespace Repositories.Implementations
 			return setWithMonAns;
 		}
 
-		public async Task<BaseResponse<SetResponse>> Update(UpdateSetRequest request)
+		public async Task<BaseResponse<SetResponse>> Update(CreateSetRequest request)
 		{
 			var set = await _context.Set.FindAsync(request.Id);
 			if (set == null) throw new BaseException("Không tìm thấy set này");
 
 			set.Name = request.Name;
 			set.Gia = request.Gia;
-			set.Url = request.Url;
+			if(request.File != null && request.File.Length > 0)
+			{
+				set.Url = request.File.Upload();
+			}
 
 			_context.Set.Update(set);
 			var setMonAn = await _context.SetMonAn.Where(x => x.SetId == request.Id).ToListAsync();

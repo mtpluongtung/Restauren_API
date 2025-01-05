@@ -26,6 +26,10 @@ namespace Repositories.Implementations
         }
         public async Task<BaseResponse<BanResponse>> Create(CreateBanRequest request)
         {
+            if(request.Id != 0)
+			{
+				return await Update(request.Adapt<UpdateBanReuquest>());
+			}
             var check = await _context.Ban.AnyAsync(x => x.TenBan == request.TenBan);
             if (check) throw new BaseException("Bàn đã tồn tại");
 
@@ -94,7 +98,6 @@ namespace Repositories.Implementations
             if (ban == null) throw new BaseException("Không tìm thấy bàn này");
 
             ban.TenBan = request.TenBan;
-            ban.TrangThai = request.TrangThai;
             _context.Ban.Update(ban);
 
             await _context.SaveChangesAsync();
